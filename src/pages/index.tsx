@@ -11,10 +11,6 @@ export default function Home() {
   const [previewStream, setPreviewStream] = useState<MediaStream | null>(null)
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null)
 
-  interface CloudinaryUploadResponse {
-    secure_url: string
-  }
-
   interface UploadToCloudinary {
     (file: File | Blob): Promise<void>
   }
@@ -25,11 +21,10 @@ export default function Home() {
     data.append("upload_preset", "capsula_do_tempo")
     data.append("cloud_name", "darqo8wva")
 
-    const res = await fetch("https://api.cloudinary.com/v1_1/darqo8wva/upload", {
+    await fetch("https://api.cloudinary.com/v1_1/darqo8wva/upload", {
       method: "POST",
       body: data,
     })
-    // const json: CloudinaryUploadResponse = await res.json()
     alert("Arquivo enviado com sucesso!")
   }
 
@@ -77,8 +72,10 @@ export default function Home() {
       >
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent z-0" />
         <div className="relative z-10 flex flex-col items-center animate-slide-up">
-          <h1 className="text-6xl text-white mb-8 transition-opacity duration-1000 drop-shadow-lg font-great-vibes">
-            Andressa & Matheus
+          <h1 className="relative text-7xl md:text-8xl text-white mb-12 mt-8 ml-4 md:ml-8 transition-opacity duration-1000 drop-shadow-2xl font-great-vibes font-bold z-20">
+            <span className="px-6 py-2 bg-white/30 backdrop-blur-sm rounded-2xl shadow-lg font-bold">
+              Andressa & Matheus
+            </span>
           </h1>
           <div className="bg-white bg-opacity-70 border-4 border-[#eab1b7] rounded-xl shadow-lg p-6 w-full max-w-md mx-4 transition-transform duration-700 hover:scale-105">
             <p className="text-lg mb-4 font-sans">Que tal compartilhar conosco seus momentos favoritos da festa? 🥰</p>
