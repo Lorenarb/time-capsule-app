@@ -3,7 +3,6 @@
 
 import { useState } from "react"
 import { CameraIcon, ImageIcon } from 'lucide-react'
-import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export default function Home() {
   const [step, setStep] = useState(1)
@@ -30,7 +29,7 @@ export default function Home() {
       method: "POST",
       body: data,
     })
-    const json: CloudinaryUploadResponse = await res.json()
+    // const json: CloudinaryUploadResponse = await res.json()
     alert("Arquivo enviado com sucesso!")
   }
 
