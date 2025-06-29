@@ -31,12 +31,10 @@ export default function Home() {
     alert("Upload realizado com sucesso! Link: " + json.secure_url)
   }
 
-  interface FileUploadEvent extends React.ChangeEvent<HTMLInputElement> {}
-
-const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
-  const file: File | undefined = e.target.files?.[0]
-  if (file) await uploadToCloudinary(file)
-}
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
+    const file: File | undefined = e.target.files?.[0]
+    if (file) await uploadToCloudinary(file)
+  }
 
   const handleMediaRecording = async () => {
     const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true })
