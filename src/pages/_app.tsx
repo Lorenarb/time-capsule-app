@@ -2,6 +2,7 @@
 import { AppProps } from 'next/app'; // For AppProps type
 import { Great_Vibes, DM_Sans } from 'next/font/google'; // Import your fonts
 import '../styles/globals.css'; // Your global Tailwind CSS file
+import { SpeedInsights } from '@vercel/speed-insights/next'; // Import SpeedInsights
 
 // Define Great Vibes font
 const greatVibes = Great_Vibes({
@@ -27,6 +28,7 @@ export default function App({ Component, pageProps }: AppProps) {
       // Tailwind's font-sans will pick up the 'DM Sans' due to the variable.
       // We'll then use var(--font-great-vibes) directly where needed.
     >
+      <SpeedInsights /> {/* Activate Speed Insights metrics */}
       <Component {...pageProps} />
     </main>
   );
