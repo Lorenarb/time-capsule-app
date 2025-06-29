@@ -11,7 +11,6 @@ export default function Home() {
 
   interface CloudinaryUploadResponse {
     secure_url: string
-    [key: string]: any
   }
 
   interface UploadToCloudinary {
@@ -34,10 +33,10 @@ export default function Home() {
 
   interface FileUploadEvent extends React.ChangeEvent<HTMLInputElement> {}
 
-  const handleFileUpload = async (e: FileUploadEvent): Promise<void> => {
-    const file: File | undefined = e.target.files?.[0]
-    if (file) await uploadToCloudinary(file)
-  }
+const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
+  const file: File | undefined = e.target.files?.[0]
+  if (file) await uploadToCloudinary(file)
+}
 
   const handleMediaRecording = async () => {
     const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true })
