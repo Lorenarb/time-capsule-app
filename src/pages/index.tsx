@@ -35,7 +35,7 @@ export default function Home() {
   }
 
   const handleStartRecording = async () => {
-    const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true })
     setPreviewStream(stream)
     const recorder = new MediaRecorder(stream)
     setMediaRecorder(recorder)
@@ -76,7 +76,7 @@ export default function Home() {
     return (
       <div
         className="relative flex flex-col items-center justify-center h-screen text-center bg-cover bg-center bg-no-repeat animate-fade-in font-sans"
-        style={{ backgroundImage: "url('https://res.cloudinary.com/darqo8wva/image/upload/v1751208682/WhatsApp_Image_2025-06-25_at_21.27.27_1_eeygbv.jpg')" }}
+        style={{ backgroundImage: "url('https:  //res.cloudinary.com/darqo8wva/image/upload/v1751208682/WhatsApp_Image_2025-06-25_at_21.27.27_1_eeygbv.jpg')" }}
       >
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent z-0" />
         <h1 className="absolute top-8 left-0 w-full text-7xl md:text-8xl text-white mt-0 mb-8 md:mt-0 md:mb-12 ml-0 md:ml-0 transition-opacity duration-1000 drop-shadow-2xl font-great-vibes z-20 text-center pointer-events-none select-none">
