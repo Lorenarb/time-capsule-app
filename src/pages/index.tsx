@@ -4,12 +4,19 @@
 import { useState, useRef, useEffect } from "react"
 import { CameraIcon, ImageIcon } from 'lucide-react'
 
+// Função utilitária para detectar suporte a webm com áudio (Safari/iOS não suporta)
+function isWebMSupported() {
+  const video = document.createElement('video')
+  return video.canPlayType('video/webm; codecs="vp8, vorbis"') !== ''
+}
+
 export default function Home() {
   const [step, setStep] = useState(1)
   const [recording, setRecording] = useState(false)
   const [mediaBlobUrl, setMediaBlobUrl] = useState<string | null>(null)
   const [previewStream, setPreviewStream] = useState<MediaStream | null>(null)
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null)
+  const [webmSupported, setWebmSupported] = useState(true)
   const previewRef = useRef<HTMLDivElement | null>(null)
 
   interface UploadToCloudinary {
@@ -37,13 +44,27 @@ export default function Home() {
   const handleStartRecording = async () => {
     const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true })
     setPreviewStream(stream)
-    const recorder = new MediaRecorder(stream)
+    // Tenta gravar em mp4 se suportado, senão cai para webm
+    let options: MediaRecorderOptions = {}
+    if (MediaRecorder.isTypeSupported('video/mp4;codecs=avc1.42E01E,mp4a.40.2')) {
+      options = { mimeType: 'video/mp4;codecs=avc1.42E01E,mp4a.40.2' }
+    } else if (MediaRecorder.isTypeSupported('video/webm;codecs=vp8,opus')) {
+      options = { mimeType: 'video/webm;codecs=vp8,opus' }
+    }
+    let recorder: MediaRecorder
+    try {
+      recorder = new MediaRecorder(stream, options)
+    } catch (err) {
+      alert('Seu navegador não suporta gravação de vídeo neste formato. Por favor, utilize o upload manual.')
+      stream.getTracks().forEach(track => track.stop())
+      return
+    }
     setMediaRecorder(recorder)
     const chunks: BlobPart[] = []
 
     recorder.ondataavailable = (e) => chunks.push(e.data)
     recorder.onstop = async () => {
-      const blob = new Blob(chunks, { type: 'video/webm' })
+      const blob = new Blob(chunks, { type: recorder.mimeType })
       setMediaBlobUrl(URL.createObjectURL(blob))
       setPreviewStream(null)
       stream.getTracks().forEach(track => track.stop())
@@ -62,6 +83,10 @@ export default function Home() {
       setMediaRecorder(null)
     }
   }
+
+  useEffect(() => {
+    setWebmSupported(isWebMSupported())
+  }, [])
 
   useEffect(() => {
     if (previewStream && previewRef.current) {
@@ -150,7 +175,53 @@ export default function Home() {
           </div>
         )}
         {mediaBlobUrl && (
-          <video src={mediaBlobUrl} controls className="w-full max-w-md mt-6 animate-fade-in border-2 border-[#b25663]" />
+          <>
+            {/* Detecta o tipo do blob para saber se é mp4 ou webm */}
+            {(() => {
+              const isMp4 = mediaBlobUrl && mediaRecorder && mediaRecorder.mimeType.includes('mp4')
+              if (isMp4) {
+                return (
+                  <video
+                    src={mediaBlobUrl}
+                    controls
+                    className="w-full max-w-md mt-6 animate-fade-in border-2 border-[#b25663]"
+                    onError={e => {
+                      const video = e.currentTarget;
+                      video.style.display = 'none';
+                      const msg = document.createElement('div');
+                      msg.textContent = 'Não foi possível exibir o vídeo gravado. Tente novamente ou utilize outro navegador.';
+                      msg.className = 'text-red-600 text-center mt-6';
+                      video.parentElement?.appendChild(msg);
+                    }}
+                  />
+                )
+              } else if (webmSupported) {
+                return (
+                  <video
+                    src={mediaBlobUrl}
+                    controls
+                    className="w-full max-w-md mt-6 animate-fade-in border-2 border-[#b25663]"
+                    onError={e => {
+                      const video = e.currentTarget;
+                      video.style.display = 'none';
+                      const msg = document.createElement('div');
+                      msg.textContent = 'Não foi possível exibir o vídeo gravado. Tente novamente ou utilize outro navegador.';
+                      msg.className = 'text-red-600 text-center mt-6';
+                      video.parentElement?.appendChild(msg);
+                    }}
+                  />
+                )
+              } else {
+                return (
+                  <div className="w-full max-w-md mt-6 animate-fade-in border-2 border-[#b25663] bg-white/80 p-4 rounded-xl text-center text-red-600">
+                    <p>Seu navegador não suporta a reprodução do vídeo gravado neste formato.<br />
+                    Por favor, utilize o Google Chrome ou outro navegador compatível.<br />
+                    Se preferir, envie seu vídeo diretamente pelo botão de upload abaixo.</p>
+                  </div>
+                )
+              }
+            })()}
+          </>
         )}
       </div>
     </div>
