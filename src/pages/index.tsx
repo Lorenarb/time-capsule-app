@@ -79,10 +79,10 @@ export default function Home() {
         style={{ backgroundImage: "url('https://res.cloudinary.com/darqo8wva/image/upload/v1751208682/WhatsApp_Image_2025-06-25_at_21.27.27_1_eeygbv.jpg')" }}
       >
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent z-0" />
+        <h1 className="absolute top-8 left-0 w-full text-7xl md:text-8xl text-white mt-0 mb-8 md:mt-0 md:mb-12 ml-0 md:ml-0 transition-opacity duration-1000 drop-shadow-2xl font-great-vibes z-20 text-center pointer-events-none select-none">
+          Andressa & Matheus
+        </h1>
         <div className="relative z-10 flex flex-col items-center animate-slide-up">
-          <h1 className="relative text-7xl md:text-8xl text-white mt-4 mb-8 md:mt-8 md:mb-12 ml-0 md:ml-0 transition-opacity duration-1000 drop-shadow-2xl font-great-vibes z-20">
-            Andressa & Matheus
-          </h1>
           <div className="bg-white bg-opacity-70 border-4 border-[#eab1b7] rounded-xl shadow-lg p-6 w-full max-w-md mx-1 transition-transform duration-700 hover:scale-105">
             <p className="text-lg mb-4 font-sans">Que tal compartilhar conosco seus momentos favoritos da festa? 🥰</p>
             <button onClick={() => setStep(2)} className="bg-[#b25663] text-white px-6 py-2 rounded-full hover:bg-[#993f4d] transition font-sans">
