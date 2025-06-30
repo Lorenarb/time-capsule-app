@@ -51,6 +51,7 @@ export default function Home() {
 
     recorder.start()
     setRecording(true)
+    setStep(2) // Move para a página de preview ao iniciar gravação
   }
 
   const handleStopRecording = () => {
@@ -72,12 +73,10 @@ export default function Home() {
       >
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent z-0" />
         <div className="relative z-10 flex flex-col items-center animate-slide-up">
-          <h1 className="relative text-7xl md:text-8xl text-white mb-12 mt-8 ml-4 md:ml-8 transition-opacity duration-1000 drop-shadow-2xl font-great-vibes font-bold z-20">
-            <span className="px-6 py-2 bg-white/30 backdrop-blur-sm rounded-2xl shadow-lg font-bold">
-              Andressa & Matheus
-            </span>
+          <h1 className="relative text-7xl md:text-8xl text-white mb-12 mt-8 ml-4 md:ml-8 transition-opacity duration-1000 drop-shadow-2xl font-great-vibes z-20">
+            Andressa & Matheus
           </h1>
-          <div className="bg-white bg-opacity-70 border-4 border-[#eab1b7] rounded-xl shadow-lg p-6 w-full max-w-md mx-4 transition-transform duration-700 hover:scale-105">
+          <div className="bg-white bg-opacity-70 border-4 border-[#eab1b7] rounded-xl shadow-lg p-6 w-full max-w-md mx-1 transition-transform duration-700 hover:scale-105">
             <p className="text-lg mb-4 font-sans">Que tal compartilhar conosco seus momentos favoritos da festa? 🥰</p>
             <button onClick={() => setStep(2)} className="bg-[#b25663] text-white px-6 py-2 rounded-full hover:bg-[#993f4d] transition font-sans">
               Compartilhar agora
@@ -127,17 +126,25 @@ export default function Home() {
         )}
 
         {previewStream && (
-          <video
-            className="w-full max-w-md mt-6 animate-fade-in border-2 border-[#b25663]"
-            autoPlay
-            muted
-            playsInline
-            ref={videoEl => {
-              if (videoEl && previewStream) {
-                videoEl.srcObject = previewStream
-              }
-            }}
-          />
+          <div className="w-full max-w-md mt-6 animate-fade-in flex flex-col items-center gap-2">
+            <video
+              className="w-full border-2 border-[#b25663]"
+              autoPlay
+              muted
+              playsInline
+              ref={videoEl => {
+                if (videoEl && previewStream) {
+                  videoEl.srcObject = previewStream
+                }
+              }}
+            />
+            <button
+              onClick={handleStopRecording}
+              className="bg-[#b25663] text-white px-4 py-2 rounded-full hover:bg-[#993f4d] transition font-sans mt-2"
+            >
+              Parar gravação
+            </button>
+          </div>
         )}
       </div>
     </div>
