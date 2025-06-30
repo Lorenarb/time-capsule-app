@@ -1,7 +1,7 @@
 // Estrutura base do site cápsula do tempo para casamento
 // Frontend em React com TailwindCSS e integração com Cloudinary para upload
 
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 import { CameraIcon, ImageIcon } from 'lucide-react'
 
 export default function Home() {
@@ -10,6 +10,7 @@ export default function Home() {
   const [mediaBlobUrl, setMediaBlobUrl] = useState<string | null>(null)
   const [previewStream, setPreviewStream] = useState<MediaStream | null>(null)
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null)
+  const previewRef = useRef<HTMLDivElement | null>(null)
 
   interface UploadToCloudinary {
     (file: File | Blob): Promise<void>
@@ -51,7 +52,7 @@ export default function Home() {
 
     recorder.start()
     setRecording(true)
-    setStep(2) // Move para a página de preview ao iniciar gravação
+    // setStep(2) // Removido para não mudar de página automaticamente ao iniciar gravação
   }
 
   const handleStopRecording = () => {
@@ -61,6 +62,12 @@ export default function Home() {
       setMediaRecorder(null)
     }
   }
+
+  useEffect(() => {
+    if (previewStream && previewRef.current) {
+      previewRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' })
+    }
+  }, [previewStream])
 
   // const romanticFontStyle = { fontFamily: "'Great Vibes', cursive" }
   // const elegantFontStyle = { fontFamily: "'DM Sans', sans-serif" }
@@ -73,7 +80,7 @@ export default function Home() {
       >
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent z-0" />
         <div className="relative z-10 flex flex-col items-center animate-slide-up">
-          <h1 className="relative text-7xl md:text-8xl text-white mb-12 mt-8 ml-4 md:ml-8 transition-opacity duration-1000 drop-shadow-2xl font-great-vibes z-20">
+          <h1 className="relative text-7xl md:text-8xl text-white mt-4 mb-8 md:mt-8 md:mb-12 ml-0 md:ml-0 transition-opacity duration-1000 drop-shadow-2xl font-great-vibes z-20">
             Andressa & Matheus
           </h1>
           <div className="bg-white bg-opacity-70 border-4 border-[#eab1b7] rounded-xl shadow-lg p-6 w-full max-w-md mx-1 transition-transform duration-700 hover:scale-105">
@@ -126,7 +133,7 @@ export default function Home() {
         )}
 
         {previewStream && (
-          <div className="w-full max-w-md mt-6 animate-fade-in flex flex-col items-center gap-2">
+          <div ref={previewRef} className="w-full max-w-md mt-6 animate-fade-in flex flex-col items-center gap-2">
             <video
               className="w-full border-2 border-[#b25663]"
               autoPlay
