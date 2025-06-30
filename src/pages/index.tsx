@@ -128,11 +128,7 @@ export default function Home() {
           </div>
         </div>
 
-        {mediaBlobUrl && (
-          <video src={mediaBlobUrl} controls className="w-full max-w-md mt-6 animate-fade-in" />
-        )}
-
-        {previewStream && (
+        {previewStream && !mediaBlobUrl && (
           <div ref={previewRef} className="w-full max-w-md mt-6 animate-fade-in flex flex-col items-center gap-2">
             <video
               className="w-full border-2 border-[#b25663]"
@@ -152,6 +148,9 @@ export default function Home() {
               Parar gravação
             </button>
           </div>
+        )}
+        {mediaBlobUrl && (
+          <video src={mediaBlobUrl} controls className="w-full max-w-md mt-6 animate-fade-in border-2 border-[#b25663]" />
         )}
       </div>
     </div>
