@@ -54,7 +54,7 @@ export default function Home() {
     let recorder: MediaRecorder
     try {
       recorder = new MediaRecorder(stream, options)
-    } catch (err) {
+    } catch {
       alert('Seu navegador não suporta gravação de vídeo neste formato. Por favor, utilize o upload manual.')
       stream.getTracks().forEach(track => track.stop())
       return
